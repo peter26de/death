@@ -168,12 +168,11 @@ function animate() {
 		lastTime = Date.now();
 	}
 	
-	for(int i = enemies.length - 1; i >= 0; i--) {
+	for(let i = enemies.length - 1; i >= 0; i--) {
 		if(enemies[i].x < -100 || enemies[i].x > width + 100 || enemies[i].y < -100 || enemies[i].y > height + 100) {
 			enemies.splice(i, 1);
 		}
 	}
-	console.log(enemies.length);
 
 	ctx.beginPath();
 	ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);

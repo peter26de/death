@@ -63,8 +63,6 @@ const player = { x: 0, y: 0, vx: 0, vy: 0, radius: 12, isLaunching: false, color
 let enemies = [];
 let particles = [];
 let lastTime = Date.now();
-let outsiders = [];
-let replaced = 0;
 
 class Enemy {
 	constructor() { this.reset(); }
@@ -161,25 +159,21 @@ function animate() {
 			const dot = dvx * nvx + dvy * nvy;
 			player.vx -= 2 * dot * nvx;
 			player.vy -= 2 * dot * nvy;
-		}
-		if(Math.sqrt(dx*dx + dy*dy) < en.radius + player.radius) {
 			enemies[i] = new Enemy();
-		}
-		if(Math.sqrt(dx*dx + dy*dy) > en.radius + player.radius + width + height) {
-			if(!outsiders.includes(i)) outsiders.push(i);
 		}
 	});
 
 	if(Date.now() - lastTime > 1000) {
-		if(outsiders.length > 0) {
-			replaced = Math.floor(Math.random() * outsiders.length);
-			enemies[outsiders[replaced]] = new Enemy();
-			outsiders.splice(replaced, 1);
-		} else {
-			enemies.push(new Enemy());
-		}
+		enemies.push(new Enemy());
 		lastTime = Date.now();
 	}
+	
+	for(int i = enemies.length - 1; i >= 0; i--) {
+		if(enemies[i].x < -100 || enemies[i].x > width + 100 || enemies[i].y < -100 || enemies[i].y > height + 100) {
+			enemies.splice(i, 1);
+		}
+	}
+	console.log(enemies.length);
 
 	ctx.beginPath();
 	ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
